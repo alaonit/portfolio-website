@@ -40,7 +40,7 @@ function Capabilities() {
         </div>
         <figure className="capabilities-card__image">
           <img
-            src="/assets/editorial/capabilities-object.png"
+            src={`${import.meta.env.BASE_URL}assets/editorial/capabilities-object.png`}
             alt="Black metal sculpture with three circular openings"
             loading="lazy"
           />

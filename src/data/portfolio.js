@@ -1,3 +1,5 @@
+const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`
+
 export const profile = {
   firstName: 'Alhagie',
   displayName: 'Alhagie Saikou Ceesay',
@@ -7,7 +9,7 @@ export const profile = {
   email: 'alagiesaikou77@gmail.com',
   github: 'https://github.com/alaonit',
   linkedin: 'https://www.linkedin.com/in/alhagie-saikou-ceesay-939062353',
-  portrait: '/portrait.png',
+  portrait: assetUrl('portrait.png'),
   portraitAlt: 'Portrait of Alhagie Saikou Ceesay',
 }
 
@@ -24,7 +26,7 @@ export const featuredProject = {
   description: 'A focused sales tracker that turns daily business activity into clear, useful decisions.',
   technologies: ['React', 'JavaScript', 'Firebase'],
   href: 'https://sales-tracker-rose.vercel.app/',
-  image: '/assets/screenshots/salesdesk-dashboard.png',
+  image: assetUrl('assets/screenshots/salesdesk-dashboard.png'),
   imageAlt: 'SalesDesk dashboard showing revenue and sales performance',
 }
 

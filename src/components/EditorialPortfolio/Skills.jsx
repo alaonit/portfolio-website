@@ -16,7 +16,7 @@ function Skills() {
       <Reveal className="skills-section__header">
         <div className="skills-section__title-block">
           <span className="section-kicker">03 / Skills</span>
-          <h2 id="skills-title">Tools behind the work</h2>
+          <h2 id="skills-title" data-scroll-text>Tools behind the work</h2>
         </div>
         <p>Core technologies I use to design, build and structure digital products.</p>
       </Reveal>

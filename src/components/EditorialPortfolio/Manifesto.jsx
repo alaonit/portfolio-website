@@ -7,7 +7,7 @@ function Manifesto() {
 
       <Reveal className="manifesto__panel">
         <span className="manifesto__label">Approach / 01</span>
-        <h2 id="manifesto-title">
+        <h2 id="manifesto-title" data-scroll-text>
           Thoughtful digital products <span>with taste, clarity and intent.</span>
         </h2>
         <div className="manifesto__meta">

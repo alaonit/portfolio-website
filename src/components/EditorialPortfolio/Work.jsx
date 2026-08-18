@@ -40,7 +40,7 @@ function Work() {
       <Reveal as="header" className="work__heading">
         <div>
           <span className="section-kicker">02 / Projects</span>
-          <h2 id="work-title">Selected work</h2>
+          <h2 id="work-title" data-scroll-text>Selected work</h2>
         </div>
         <p>Focused products built to solve real problems with clarity and care.</p>
       </Reveal>

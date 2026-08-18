@@ -51,7 +51,7 @@ function Contact() {
 
         <div className="contact__intro">
           <span className="section-kicker contact__kicker">05 / Contact</span>
-          <h2 id="contact-title">Let&apos;s build something useful.</h2>
+          <h2 id="contact-title" data-scroll-text>Let&apos;s build something useful.</h2>
           <p>Have a thoughtful product or engineering challenge in mind? Tell me about it.</p>
           <div className="contact__direct">
             <span>Direct email</span>

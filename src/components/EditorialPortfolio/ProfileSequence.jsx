@@ -57,7 +57,7 @@ function ProfileSequence() {
       <Reveal as="header" className="profile-sequence__heading">
         <div>
           <span className="section-kicker">04 / About</span>
-          <h2 id="profile-title">Engineer with intent</h2>
+          <h2 id="profile-title" data-scroll-text>Engineer with intent</h2>
         </div>
         <p>Thoughtful interfaces, dependable foundations and a practical approach to every build.</p>
       </Reveal>

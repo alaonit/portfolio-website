@@ -1,4 +1,4 @@
-import { gsap, ScrollTrigger, useGSAP } from '../../gsap-setup.js'
+import { gsap, ScrollTrigger, SplitText, useGSAP } from '../../gsap-setup.js'
 import { acquireWindowLenis, releaseWindowLenis } from '../../lenis-setup.js'
 
 function ScrollExperience() {
@@ -43,6 +43,37 @@ function ScrollExperience() {
       const sharedTrigger = {
         invalidateOnRefresh: true,
       }
+      const textSplits = []
+
+      gsap.utils.toArray('[data-scroll-text]').forEach((heading) => {
+        const split = SplitText.create(heading, {
+          type: 'words',
+          wordsClass: 'scroll-reveal-word',
+        })
+
+        textSplits.push(split)
+
+        gsap.fromTo(split.words,
+          {
+            yPercent: 42,
+            opacity: 0.12,
+          },
+          {
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.08,
+            ease: 'none',
+            scrollTrigger: {
+              ...sharedTrigger,
+              trigger: heading,
+              start: 'top 90%',
+              end: 'top 50%',
+              scrub: 0.4,
+            },
+          },
+        )
+      })
 
       gsap.timeline({
         scrollTrigger: {
@@ -64,20 +95,6 @@ function ScrollExperience() {
           y: -24,
           ease: 'none',
         }, 0)
-
-      gsap.from('.manifesto__panel h2', {
-        y: 54,
-        opacity: 0,
-        duration: 1.05,
-        ease: 'power3.out',
-        clearProps: 'transform,opacity',
-        scrollTrigger: {
-          ...sharedTrigger,
-          trigger: '.manifesto__panel',
-          start: 'top 76%',
-          once: true,
-        },
-      })
 
       gsap.from('.manifesto__meta span', {
         y: 18,
@@ -140,11 +157,10 @@ function ScrollExperience() {
         },
       })
 
-      gsap.from('.work__heading h2, .work__heading p', {
+      gsap.from('.work__heading p', {
         y: 34,
         opacity: 0,
         duration: 0.85,
-        stagger: 0.12,
         ease: 'power3.out',
         clearProps: 'transform,opacity',
         scrollTrigger: {
@@ -189,11 +205,10 @@ function ScrollExperience() {
         })
       })
 
-      gsap.from('.profile-sequence__heading h2, .profile-sequence__heading p', {
+      gsap.from('.profile-sequence__heading p', {
         y: 38,
         opacity: 0,
         duration: 0.9,
-        stagger: 0.14,
         ease: 'power3.out',
         clearProps: 'transform,opacity',
         scrollTrigger: {
@@ -249,7 +264,7 @@ function ScrollExperience() {
         },
       )
 
-      gsap.from('.contact__topline, .contact__kicker, .contact__intro > h2, .contact__intro > p, .contact__direct, .contact-form', {
+      gsap.from('.contact__topline, .contact__kicker, .contact__intro > p, .contact__direct, .contact-form', {
         y: 42,
         opacity: 0,
         duration: 0.95,
@@ -280,6 +295,7 @@ function ScrollExperience() {
       )
 
       return () => {
+        textSplits.forEach((split) => split.revert())
         document.removeEventListener('click', handleAnchorClick)
         lenis.off('scroll', syncScrollTrigger)
         releaseWindowLenis()

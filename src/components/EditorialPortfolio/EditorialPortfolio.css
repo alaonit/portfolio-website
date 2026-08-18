@@ -5,6 +5,11 @@
   background: var(--canvas);
 }
 
+.scroll-reveal-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
 .hero {
   position: relative;
   z-index: 5;

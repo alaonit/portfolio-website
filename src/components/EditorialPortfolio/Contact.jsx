@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FaGithub, FaLinkedinIn } from 'react-icons/fa6'
 import { profile } from '../../data/portfolio.js'
 import Reveal from './Reveal.jsx'
@@ -6,20 +6,30 @@ import Reveal from './Reveal.jsx'
 function Contact() {
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('')
+  const [statusTone, setStatusTone] = useState('idle')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const statusRef = useRef(null)
 
   const clearFieldError = (field) => {
     if (!errors[field]) return
     setErrors((current) => ({ ...current, [field]: undefined }))
   }
 
-  const handleSubmit = (event) => {
+  const focusStatus = () => {
+    requestAnimationFrame(() => statusRef.current?.focus())
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
+
+    if (isSubmitting) return
 
     const form = event.currentTarget
     const formData = new FormData(form)
     const name = String(formData.get('name') ?? '').trim()
     const email = String(formData.get('email') ?? '').trim()
     const message = String(formData.get('message') ?? '').trim()
+    const honeypot = String(formData.get('_honey') ?? '').trim()
     const nextErrors = {}
 
     if (name.length < 2) nextErrors.name = 'Enter at least two characters.'
@@ -29,16 +39,63 @@ function Contact() {
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors)
       setStatus('Please correct the highlighted fields.')
+      setStatusTone('error')
       requestAnimationFrame(() => form.querySelector('[aria-invalid="true"]')?.focus())
       return
     }
 
-    setErrors({})
-    setStatus('Opening your email app with the message prepared.')
+    if (honeypot) {
+      form.reset()
+      setErrors({})
+      setStatus('Thanks. Your message has been received.')
+      setStatusTone('success')
+      return
+    }
 
-    const subject = encodeURIComponent(`Portfolio enquiry from ${name}`)
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`
+    if (!navigator.onLine) {
+      setStatus('You appear to be offline. Check your connection and try again.')
+      setStatusTone('error')
+      focusStatus()
+      return
+    }
+
+    setErrors({})
+    setStatus('Sending your message…')
+    setStatusTone('pending')
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${profile.email}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _subject: `Portfolio enquiry from ${name}`,
+          _template: 'table',
+          _honey: honeypot,
+        }),
+      })
+      const result = await response.json().catch(() => null)
+
+      if (!response.ok || result?.success === false || result?.success === 'false') {
+        throw new Error('Form delivery failed')
+      }
+
+      form.reset()
+      setStatus('Thanks. Your message has been sent successfully.')
+      setStatusTone('success')
+    } catch {
+      setStatus('Your message could not be sent. Please try again or use the direct email link.')
+      setStatusTone('error')
+      focusStatus()
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -59,7 +116,27 @@ function Contact() {
           </div>
         </div>
 
-        <form className="contact-form" onSubmit={handleSubmit} noValidate>
+        <form
+          className="contact-form"
+          action={`https://formsubmit.co/${profile.email}`}
+          method="POST"
+          aria-busy={isSubmitting}
+          onSubmit={handleSubmit}
+          noValidate
+        >
+          <input type="hidden" name="_subject" value="New portfolio enquiry" />
+          <input type="hidden" name="_template" value="table" />
+          <div className="contact-form__honeypot" aria-hidden="true">
+            <label htmlFor="contact-website">Website</label>
+            <input
+              id="contact-website"
+              name="_honey"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+
           <div className="contact-form__header">
             <h3>Project enquiry</h3>
             <span>All fields required</span>
@@ -114,10 +191,19 @@ function Contact() {
           </div>
 
           <div className="contact-form__actions">
-            <button className="contact-form__submit" type="submit">
-              Prepare email <span aria-hidden="true">↗</span>
+            <button className="contact-form__submit" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Sending…' : 'Send message'} <span aria-hidden="true">↗</span>
             </button>
-            <p className="contact-form__status" role="status" aria-live="polite">{status}</p>
+            <p
+              ref={statusRef}
+              className="contact-form__status"
+              data-state={statusTone}
+              role={statusTone === 'error' ? 'alert' : 'status'}
+              aria-live="polite"
+              tabIndex={-1}
+            >
+              {status}
+            </p>
           </div>
         </form>
 

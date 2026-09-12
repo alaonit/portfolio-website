@@ -1,0 +1,30 @@
+.scroll-stack {
+  position: relative;
+  display: grid;
+  gap: clamp(72px, 10svh, 120px);
+}
+
+.scroll-stack__slot {
+  position: relative;
+  min-width: 0;
+}
+
+.scroll-stack__card {
+  transform-origin: top center;
+  backface-visibility: hidden;
+}
+
+.scroll-stack__end {
+  height: 38svh;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce), (max-height: 539px) {
+  .scroll-stack {
+    gap: 24px;
+  }
+
+  .scroll-stack__end {
+    display: none;
+  }
+}

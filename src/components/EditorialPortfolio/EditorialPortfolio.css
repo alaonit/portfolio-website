@@ -607,7 +607,7 @@
 }
 
 .skills-section__header h2 {
-  max-width: 8ch;
+  max-width: 12ch;
   margin: 0;
   font-family: var(--display);
   font-size: clamp(5rem, 11vw, 11rem);
@@ -626,31 +626,23 @@
   line-height: 1.6;
 }
 
-.skills-list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  overflow: hidden;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
 .skill-card {
   position: relative;
   isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  gap: 28px 48px;
+  min-height: clamp(320px, 48svh, 440px);
   min-width: 0;
-  padding: clamp(20px, 2vw, 32px);
+  padding: clamp(28px, 3.8vw, 56px);
   overflow: hidden;
   color: var(--text);
-  background: #181916;
-  outline: 0;
-  transition:
-    background 320ms ease,
-    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  background: #1b1c19;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: 0 -12px 36px rgb(0 0 0 / 12%);
+  transition: background 320ms ease;
 }
 
 .skill-card::before {
@@ -659,7 +651,7 @@
   z-index: -1;
   content: '';
   background: var(--skill-color);
-  opacity: 0;
+  opacity: 0.035;
   transition: opacity 420ms ease;
 }
 
@@ -678,9 +670,7 @@
 
 .skill-card:hover,
 .skill-card:focus-visible {
-  z-index: 2;
   background: #1c1d1a;
-  transform: translateY(-4px);
 }
 
 .skill-card:hover::before,
@@ -698,6 +688,7 @@
 }
 
 .skill-card__meta {
+  grid-column: 1 / -1;
   display: flex;
   gap: 16px;
   align-items: flex-start;
@@ -706,8 +697,8 @@
 
 .skill-card__number,
 .skill-card__use {
-  color: var(--dim);
-  font-size: clamp(0.64rem, 0.7vw, 0.76rem);
+  color: var(--muted);
+  font-size: clamp(0.72rem, 0.9vw, 0.82rem);
   font-weight: 650;
   letter-spacing: 0.08em;
   line-height: 1.2;
@@ -716,16 +707,18 @@
 }
 
 .skill-card__use {
-  max-width: 14ch;
+  max-width: 24ch;
   text-align: right;
 }
 
 .skill-card__icon {
   display: grid;
-  flex: 1;
+  grid-column: 2;
+  grid-row: 2;
+  align-self: center;
   place-items: center;
-  color: #686963;
-  font-size: clamp(4.6rem, 7.2vw, 7.4rem);
+  color: var(--skill-color);
+  font-size: clamp(6rem, 13vw, 11rem);
   transition:
     color 360ms ease,
     transform 460ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -752,13 +745,16 @@
 
 .skill-card__copy {
   display: grid;
-  gap: 8px;
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  gap: 20px;
 }
 
 .skill-card h3 {
   margin: 0;
   font-family: var(--display);
-  font-size: clamp(2.2rem, 3.7vw, 4.2rem);
+  font-size: clamp(3.5rem, 7.5vw, 7rem);
   font-stretch: condensed;
   font-weight: 600;
   letter-spacing: -0.06em;
@@ -766,10 +762,10 @@
 }
 
 .skill-card p {
-  max-width: 24ch;
+  max-width: 38ch;
   margin: 0;
   color: var(--muted);
-  font-size: clamp(0.72rem, 0.8vw, 0.88rem);
+  font-size: clamp(0.92rem, 1.15vw, 1.08rem);
   line-height: 1.45;
 }
 
@@ -1622,12 +1618,9 @@
     max-width: 38ch;
   }
 
-  .skills-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .skill-card {
-    padding: clamp(20px, 4vw, 30px);
+    gap: 24px;
+    padding: clamp(24px, 4vw, 30px);
   }
 
   .profile-sequence {
@@ -1749,28 +1742,37 @@
     font-size: 18vw;
   }
 
-  .skills-list {
-    border-radius: 12px;
-  }
-
   .skill-card {
-    padding: 15px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto 1fr auto;
+    gap: 24px 16px;
+    min-height: 330px;
+    padding: 24px;
+    border-radius: 18px;
   }
 
   .skill-card__use {
-    display: none;
+    max-width: 20ch;
   }
 
   .skill-card__icon {
-    font-size: clamp(3.3rem, 15vw, 5.2rem);
+    grid-column: 1 / -1;
+    justify-self: end;
+    font-size: 4.5rem;
+  }
+
+  .skill-card__copy {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    gap: 14px;
   }
 
   .skill-card h3 {
-    font-size: clamp(1.8rem, 9vw, 3rem);
+    font-size: clamp(2.8rem, 12vw, 4rem);
   }
 
   .skill-card p {
-    font-size: clamp(0.64rem, 3vw, 0.76rem);
+    font-size: 0.9rem;
   }
 
   .about-card {

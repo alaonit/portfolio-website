@@ -119,7 +119,6 @@ function Hero() {
 
         <p className="hero__roles">
           <span>{profile.rolePrimary}</span>
-          <span>{profile.roleSecondary}</span>
         </p>
 
         <a className="hero__scroll" href="#approach" aria-label="Continue to the approach section">
